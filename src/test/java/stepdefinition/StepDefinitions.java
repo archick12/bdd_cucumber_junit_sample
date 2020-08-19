@@ -8,7 +8,7 @@ import pages.LoginPage;
 import utils.CucumberRunner;
 import utils.WebDriverFactory;
 
-public class StepDefinitions extends CucumberRunner {
+public class StepDefinitions {
 
   @Then("^I navigate to Jira Login Page$")
   public void navigateToLoginPage() {

@@ -1,23 +1,46 @@
 package utils;
 
 import cucumber.api.CucumberOptions;
-import cucumber.api.testng.AbstractTestNGCucumberTests;
+import org.junit.runner.RunWith;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeSuite;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
+import io.cucumber.junit.Cucumber;
 
-@CucumberOptions(strict = true, monochrome = true, features = "src/test/resources/features", glue = "stepdefinition", format = {"pretty", "json:target/cucumber.json"}, tags = {"@Regression,@JunitScenario,@TestngScenario"})
+import java.io.File;
+import java.io.IOException;
 
-public class CucumberRunner extends AbstractTestNGCucumberTests {
+import com.google.common.io.Files;
 
-  @BeforeSuite(alwaysRun = true)
+@RunWith(Cucumber.class)
+@CucumberOptions(strict = true, monochrome = true, features = "src/test/resources/features", glue = "stepdefinition", format = {"pretty", "json:target/cucumber.json"}, tags = {"@Regression"})
+public class CucumberRunner {
+
+  @Before
   public void setUp() {
     WebDriverFactory.createInstance("Chrome");
   }
 
-  @AfterMethod(alwaysRun = true)
-  public void tearDownr(ITestResult result) {
+  @After
+  public void tearDown(ITestResult result) {
+    if (!result.isSuccess()) {
+      try {
+        takeScreenshot();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
     WebDriverFactory.getDriver().quit();
+  }
+
+  public void takeScreenshot() throws IOException {
+    File scrFile = ((TakesScreenshot) WebDriverFactory.getDriver()).getScreenshotAs(OutputType.FILE);
+    File trgtFile = new File(System.getProperty("user.dir") + "//screenshots/screenshot.png");
+    System.out.println("SAVING Screenshot to " + trgtFile.getAbsolutePath());
+    trgtFile.getParentFile().mkdir();
+    trgtFile.createNewFile();
+    Files.copy(scrFile, trgtFile);
   }
 }
