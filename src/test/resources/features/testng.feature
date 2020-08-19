@@ -1,8 +1,9 @@
 Feature: To search testng in google
 
-  @TestngScenario
-  Scenario: Testng Google
-    Given I am on "junit" search page
-    When I type "testng"
-    Then I click search button
-    Then I clear search textbox
+  @Regression
+  Scenario: Login to Hillel Jira
+    Given I navigate to Jira Login Page
+    And I enter user name - "webinar5"
+    And I enter password - "webinar5"
+    And I click on the login button
+    Then I am on the Home Page
