@@ -11,9 +11,9 @@ import org.openqa.selenium.TakesScreenshot;
 import pages.HomePage;
 import pages.LoginPage;
 import utils.WebDriverFactory;
-
 import java.io.File;
 import java.io.IOException;
+
 
 public class StepDefinitions {
 
@@ -45,33 +45,27 @@ public class StepDefinitions {
 
   @Then("^I navigate to Jira Login Page$")
   public void navigateToLoginPage() {
-    LoginPage loginPage = new LoginPage(WebDriverFactory.getDriver());
-    loginPage.navigateTo();
+    new LoginPage().navigateTo();
   }
-
 
   @Then("^I enter user name - \"(.*?)\"$")
   public void enterUserName(String userName) {
-    LoginPage loginPage = new LoginPage(WebDriverFactory.getDriver());
-    loginPage.enterUserName(userName);
+    new LoginPage().enterUserName(userName);
   }
 
   @Then("^I enter password - \"(.*?)\"$")
   public void enterPassword(String password) {
-    LoginPage loginPage = new LoginPage(WebDriverFactory.getDriver());
-    loginPage.enterPassword(password);
+    new LoginPage().enterPassword(password);
   }
 
   @Then("^I click on the login button$")
   public void clickLoginButton() {
-    LoginPage loginPage = new LoginPage(WebDriverFactory.getDriver());
-    loginPage.clickLogin();
+    new LoginPage().clickLogin();
   }
 
   @When("^I am on the Home Page$")
   public void atTheHomePage() {
-    HomePage homePage = new HomePage(WebDriverFactory.getDriver());
-    assert homePage.onPage();
+    assert new HomePage().onPage();
   }
 
   @When("^I debug$")
