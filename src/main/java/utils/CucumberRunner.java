@@ -1,23 +1,11 @@
 package utils;
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.testng.AbstractTestNGCucumberTests;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeSuite;
+import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
+import io.cucumber.junit.Cucumber;
 
-@CucumberOptions(strict = true, monochrome = true, features = "src/test/resources/features", glue = "stepdefinition", format = {"pretty", "json:target/cucumber.json"}, tags = {"@Regression,@JunitScenario,@TestngScenario"})
+@RunWith(Cucumber.class)
+@CucumberOptions(monochrome = true, features = "src/test/resources/features", glue = "stepdefinition", plugin = {"pretty", "json:target/cucumber.json"}, tags = ("@Regression"))
+public class CucumberRunner {
 
-public class CucumberRunner extends AbstractTestNGCucumberTests {
-
-  @BeforeSuite(alwaysRun = true)
-  public void setUp() {
-    WebDriverFactory.createInstance("Chrome");
-  }
-
-  @AfterMethod(alwaysRun = true)
-  public void tearDownr(ITestResult result) {
-    WebDriverFactory.getDriver().quit();
-  }
 }
