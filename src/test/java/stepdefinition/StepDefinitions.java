@@ -1,14 +1,47 @@
 package stepdefinition;
 
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import com.google.common.io.Files;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import pages.HomePage;
 import pages.LoginPage;
-import utils.CucumberRunner;
 import utils.WebDriverFactory;
 
+import java.io.File;
+import java.io.IOException;
+
 public class StepDefinitions {
+
+  @Before
+  public void beforeCucumberScenario(Scenario scenario) {
+    WebDriverFactory.createInstance("Chrome");
+  }
+
+  @After
+  public void afterCucumberScenario(Scenario scenario) {
+    if (scenario.getStatus().toString().contains("FAILED")) {
+      try {
+        takeScreenshot();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    WebDriverFactory.getDriver().close();
+  }
+
+  public void takeScreenshot() throws IOException {
+    File scrFile = ((TakesScreenshot) WebDriverFactory.getDriver()).getScreenshotAs(OutputType.FILE);
+    File trgtFile = new File(System.getProperty("user.dir") + "//screenshots/screenshot.png");
+    System.out.println("SAVING Screenshot to " + trgtFile.getAbsolutePath());
+    trgtFile.getParentFile().mkdir();
+    trgtFile.createNewFile();
+    Files.copy(scrFile, trgtFile);
+  }
 
   @Then("^I navigate to Jira Login Page$")
   public void navigateToLoginPage() {
@@ -41,4 +74,8 @@ public class StepDefinitions {
     assert homePage.onPage();
   }
 
+  @When("^I debug$")
+  public void debug() {
+    int a = 0;
+  }
 }
